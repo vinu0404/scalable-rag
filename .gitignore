@@ -1,3 +1,35 @@
+# ---- rag-ingest project rules ----
+# Local environment settings and credentials.
+.env
+.env.*
+!.env.example
+!.env.local.example
+
+# Python virtual environments.
+.venv/
+venv/
+
+# Python bytecode.
+__pycache__/
+*.py[cod]
+
+# Build output and package metadata.
+build/
+dist/
+*.egg-info/
+
+# Test, coverage, lint, and type-checker output.
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.ruff_cache/
+.mypy_cache/
+
+# Live AWS test data and reports (never committed)
+test_data/
+
+# ---- GitHub Python template ----
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]

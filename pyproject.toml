@@ -1,0 +1,61 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rag-ingest"
+version = "0.1.0"
+description = "Configurable, recoverable document ingestion for RAG applications."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "python-dotenv>=1.0,<2.0",
+    "tenacity>=9.0,<10.0",
+]
+
+[project.scripts]
+rag-ingest = "rag_ingest.cli:main"
+
+[project.optional-dependencies]
+postgres = [
+    "sqlalchemy[asyncio]>=2.0,<3.0",
+    "psycopg[binary]>=3.2,<4.0",
+    "alembic>=1.13,<2.0",
+]
+
+aws = ["boto3>=1.36,<2"]
+processing = ["pypdf>=5,<7", "httpx>=0.27,<1", "tiktoken>=0.8,<1"]
+api = ["fastapi>=0.115,<1", "uvicorn>=0.30,<1"]
+# Page rendering for image-based recognizers (any OCR/vision tool you inject).
+ocr = ["pypdfium2>=5,<6", "pillow>=10,<14"]
+all = ["rag-ingest[postgres,aws,processing,api,ocr]"]
+dev = ["rag-ingest[all]", "moto[s3,sqs]>=5,<6", "build>=1,<2", "ruff>=0.6,<1"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["rag_ingest*"]
+namespaces = false
+
+[tool.ruff]
+target-version = "py311"
+extend-exclude = ["test_data"]
+
+[tool.ruff.lint]
+# pyflakes, pycodestyle, bugbear and the bandit security rules.
+select = ["E", "F", "W", "B", "S"]
+# Long lines are left to the formatter; B008 flags FastAPI's Depends()/Header() defaults.
+ignore = ["E501", "B008"]
+
+[tool.ruff.lint.per-file-ignores]
+# Tests use fake credentials, seeded randomness, bare asserts and fixed SQL.
+"tests/**" = ["S101", "S105", "S106", "S107", "S311", "S608", "B023", "B905"]
+# Search SQL joins fixed condition fragments (filters, document scope); every
+# value is a bound parameter. Reviewed: no caller text reaches the SQL string.
+"src/rag_ingest/adapters/postgres/metadata.py" = ["S608"]
+"src/rag_ingest/adapters/postgres/vectors.py" = ["S608"]
+"src/rag_ingest/adapters/postgres/keyword.py" = ["S608"]
+"examples/paradedb_keyword.py" = ["S608"]
+# The live-test PDF generator uses seeded randomness for reproducible noise.
+"live_test/make_pdfs.py" = ["S311"]
+# The benchmark generates seeded synthetic data; its SQL interpolates only module constants.
+"bench/**" = ["S311", "S608"]

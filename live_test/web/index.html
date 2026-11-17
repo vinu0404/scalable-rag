@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Document Chat</title>
+<style>
+:root {
+  --bg: #f6f7f9; --panel: #ffffff; --text: #1d2330; --muted: #5d6676; --line: #e2e5ea;
+  --accent: #2f5bd3; --accent-text: #ffffff; --soft: #eef2fb;
+  --ok: #1d7a46; --ok-bg: #e5f4ec; --warn: #8a5a00; --warn-bg: #fdf3dc;
+  --bad: #b3261e; --bad-bg: #fbe9e7; --info: #2f5bd3; --info-bg: #e8eefc;
+  --dup: #6b3fa0; --dup-bg: #f1eafa;
+  --radius: 10px; --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #12151b; --panel: #1a1e26; --text: #e6e8ec; --muted: #9aa3b2; --line: #2a303b;
+    --accent: #6d8ff0; --accent-text: #0d1117; --soft: #212838;
+    --ok: #5cc98c; --ok-bg: #16301f; --warn: #e3b552; --warn-bg: #33290f;
+    --bad: #f08a80; --bad-bg: #3a1a17; --info: #8fa9f5; --info-bg: #1c2540;
+    --dup: #c4a3ee; --dup-bg: #2a1f3b;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text);
+  font: 14px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+header { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;
+  padding: 14px 16px; border-bottom: 1px solid var(--line); background: var(--panel); }
+h1 { font-size: 17px; margin: 0; }
+h2 { font-size: 15px; margin: 0 0 10px; }
+.token { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+input[type=password], input[type=text], textarea { font: inherit; color: var(--text); background: var(--bg);
+  border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; }
+input[type=password] { width: 260px; max-width: 60vw; }
+button { font: inherit; border: 1px solid var(--line); background: var(--panel); color: var(--text);
+  border-radius: 8px; padding: 7px 12px; cursor: pointer; }
+button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-text); font-weight: 600; }
+button:disabled { opacity: .55; cursor: default; }
+button.link { border: none; background: none; color: var(--accent); padding: 2px 4px; }
+main { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 16px; padding: 16px; }
+@media (max-width: 900px) { main { grid-template-columns: minmax(0, 1fr); } }
+section { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; min-width: 0; }
+.drop { border: 2px dashed var(--line); border-radius: var(--radius); padding: 18px; text-align: center; color: var(--muted); }
+.drop.over { border-color: var(--accent); background: var(--soft); }
+.drop p { margin: 8px 0 0; }
+.counts { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+.count { padding: 4px 10px; border-radius: 999px; background: var(--soft); font-size: 13px; }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 12px; color: var(--muted); font-weight: 600; }
+td.name { word-break: break-word; max-width: 280px; }
+td.size { color: var(--muted); white-space: nowrap; }
+.chip { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+.chip.ready { color: var(--ok); background: var(--ok-bg); }
+.chip.work { color: var(--info); background: var(--info-bg); }
+.chip.wait { color: var(--warn); background: var(--warn-bg); }
+.chip.failed { color: var(--bad); background: var(--bad-bg); }
+.chip.duplicate { color: var(--dup); background: var(--dup-bg); }
+.detail { color: var(--muted); font-size: 12px; margin-top: 3px; }
+.bar { height: 4px; background: var(--line); border-radius: 4px; margin-top: 5px; overflow: hidden; }
+.bar > div { height: 100%; background: var(--accent); width: 0; transition: width .2s; }
+.chat { display: flex; flex-direction: column; height: calc(100vh - 120px); min-height: 420px; }
+@media (max-width: 900px) { .chat { height: auto; } }
+.messages { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding-right: 4px; }
+.msg { padding: 10px 12px; border-radius: var(--radius); max-width: 100%; }
+.msg.user { background: var(--soft); align-self: flex-end; }
+.msg.bot { border: 1px solid var(--line); }
+.msg .answer { white-space: pre-wrap; word-break: break-word; }
+.cite { color: var(--accent); font-weight: 600; cursor: pointer; }
+.sources { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+.source { border-top: 1px solid var(--line); padding-top: 8px; font-size: 13px; }
+.source.hl { background: var(--soft); border-radius: 6px; }
+.source .meta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.source .snippet { color: var(--muted); white-space: pre-wrap; word-break: break-word; margin-top: 4px; }
+.ask { display: flex; gap: 8px; margin-top: 12px; }
+.ask textarea { flex: 1; resize: vertical; min-height: 44px; }
+.muted { color: var(--muted); }
+.err { color: var(--bad); }
+.small { font-size: 12px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Document Chat</h1>
+  <div class="token">
+    <label for="token" class="muted small">API token</label>
+    <input id="token" type="password" placeholder="token from INGEST_API_TOKENS" autocomplete="off">
+    <button id="saveToken">Save</button>
+    <span id="health" class="small muted"></span>
+  </div>
+</header>
+
+<main>
+  <section aria-labelledby="up">
+    <h2 id="up">Upload files</h2>
+    <div id="drop" class="drop">
+      <button class="primary" id="choose">Choose files</button>
+      <input id="picker" type="file" multiple accept=".pdf,.txt,application/pdf,text/plain" hidden>
+      <p>or drop PDF / .txt files here</p>
+    </div>
+    <div class="counts" id="counts"></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>File</th><th>Size</th><th>Status</th><th></th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <p class="small muted">Up to 10 files upload at once; the rest wait in the list. Each file's SHA-256 is computed here first, so an exact copy
+      of a document you already have is refused before it is uploaded.
+      <button class="link" id="clear">Clear finished from list</button></p>
+  </section>
+
+  <section class="chat" aria-labelledby="ch">
+    <h2 id="ch">AI chat</h2>
+    <div class="messages" id="messages">
+      <div class="muted small">Ask about your uploaded documents. Answers cite numbered sources; open a source to check the page.</div>
+    </div>
+    <form class="ask" id="askForm">
+      <textarea id="question" placeholder="Ask a question…" rows="2" required></textarea>
+      <button class="primary" id="askBtn" type="submit">Ask</button>
+    </form>
+  </section>
+</main>
+
+<script>
+"use strict";
+const UPLOADS_AT_ONCE = 10;
+const HASH_LIMIT = 512 * 1024 * 1024;  // larger files are hashed by the server after upload
+const POLL_MS = 2000;
+const STORE = "doc-chat-rows-v1";
+const TERMINAL = new Set(["ready", "failed", "duplicate", "interrupted"]);
+
+const $ = (id) => document.getElementById(id);
+const rows = [];          // one per selected file; File objects are not persisted
+const queue = [];         // rows waiting for an upload slot
+let active = 0;
+
+// ---- small helpers ---------------------------------------------------------------
+function esc(s) {
+  return String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+function size(n) {
+  if (n < 1024) return n + " B";
+  if (n < 1024 ** 2) return (n / 1024).toFixed(1) + " KB";
+  return (n / 1024 ** 2).toFixed(1) + " MB";
+}
+function token() { try { return localStorage.getItem("doc-chat-token") || ""; } catch { return ""; } }
+function hex(buf) { return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join(""); }
+async function sha256(blob) { return hex(await crypto.subtle.digest("SHA-256", await blob.arrayBuffer())); }
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+async function api(method, path, body, extraHeaders = {}) {
+  const headers = { Authorization: "Bearer " + token(), ...extraHeaders };
+  if (body !== undefined) headers["Content-Type"] = "application/json";
+  const r = await fetch(path, { method, headers, body: body === undefined ? undefined : JSON.stringify(body) });
+  let data = null;
+  try { data = await r.json(); } catch { /* empty body */ }
+  if (r.status === 401) throw Object.assign(new Error("Token missing or wrong — paste it above and Save."), { status: 401 });
+  return { status: r.status, ok: r.ok, data };
+}
+
+function put(url, headers, blob, onProgress) {
+  return new Promise((resolve, reject) => {
+    const x = new XMLHttpRequest();
+    x.open("PUT", url);
+    for (const [k, v] of Object.entries(headers || {})) x.setRequestHeader(k, v);
+    x.upload.onprogress = (e) => e.lengthComputable && onProgress(e.loaded);
+    // 412: this upload's own create-only key already holds the bytes from an earlier
+    // attempt; the server still verifies size and SHA-256 before accepting them.
+    x.onload = () => ((x.status >= 200 && x.status < 300) || x.status === 412 ? resolve() :
+      reject(new Error("storage refused the upload (" + x.status + ")")));
+    x.onerror = () => reject(new Error("Network or CORS error talking to S3 — is the bucket CORS rule in place?"));
+    x.send(blob);
+  });
+}
+
+// ---- persistence (per-browser convenience only) -----------------------------------
+function save() {
+  try {
+    const keep = rows.map(({ file, ...r }) => r);
+    localStorage.setItem(STORE, JSON.stringify(keep));
+  } catch { /* storage unavailable: list just isn't remembered */ }
+}
+function load() {
+  try {
+    for (const r of JSON.parse(localStorage.getItem(STORE) || "[]")) {
+      if (!r.uploadId && !TERMINAL.has(r.phase)) { r.phase = "interrupted"; r.detail = "Page was closed before upload started; choose the file again."; }
+      rows.push(r);
+    }
+  } catch { /* ignore */ }
+}
+
+// ---- rendering --------------------------------------------------------------------
+const CHIP = {
+  queued: ["wait", "Queued"], hashing: ["work", "Hashing"], starting: ["work", "Starting"],
+  uploading: ["work", "Uploading"], verifying: ["work", "Verifying"], processing: ["work", "Processing"],
+  ready: ["ready", "Ready"], failed: ["failed", "Failed"], duplicate: ["duplicate", "Duplicate"],
+  interrupted: ["wait", "Interrupted"],
+};
+function render() {
+  const tally = {};
+  $("rows").innerHTML = rows.map((r, i) => {
+    tally[r.phase] = (tally[r.phase] || 0) + 1;
+    const [cls, label] = CHIP[r.phase] || ["wait", r.phase];
+    const bar = r.phase === "uploading" ? `<div class="bar"><div style="width:${Math.round((r.progress || 0) * 100)}%"></div></div>` : "";
+    let action = "";
+    if (r.phase === "duplicate" && r.file) action = `<button class="link" data-act="anyway" data-i="${i}">Upload anyway</button>`;
+    if ((r.phase === "failed" || r.phase === "interrupted") && r.file) action = `<button class="link" data-act="retry" data-i="${i}">Retry</button>`;
+    if (r.phase === "ready") action = `<button class="link" data-act="open" data-i="${i}">Open</button>`;
+    return `<tr><td class="name">${esc(r.name)}</td><td class="size">${size(r.size)}</td>
+      <td><span class="chip ${cls}">${label}</span>${r.detail ? `<div class="detail">${esc(r.detail)}</div>` : ""}${bar}</td>
+      <td>${action}</td></tr>`;
+  }).join("") || `<tr><td colspan="4" class="muted">No files yet.</td></tr>`;
+  const order = ["ready", "processing", "verifying", "uploading", "hashing", "starting", "queued", "duplicate", "failed", "interrupted"];
+  $("counts").innerHTML = rows.length ? `<span class="count">Total ${rows.length}</span>` +
+    order.filter((p) => tally[p]).map((p) => `<span class="count">${CHIP[p][1]} ${tally[p]}</span>`).join("") : "";
+}
+let renderPending = false;
+function update(r, patch) {
+  Object.assign(r, patch);
+  if (!renderPending) { renderPending = true; requestAnimationFrame(() => { renderPending = false; render(); }); }
+  save();
+}
+
+// ---- upload pipeline --------------------------------------------------------------
+function addFiles(files) {
+  for (const file of files) {
+    if (!/\.(pdf|txt)$/i.test(file.name)) continue;
+    const r = { key: "web-" + crypto.randomUUID(), name: file.name, size: file.size, phase: "queued", detail: "", file };
+    rows.push(r); queue.push(r);
+  }
+  render(); save(); pump();
+}
+function pump() {
+  while (active < UPLOADS_AT_ONCE && queue.length) {
+    const r = queue.shift();
+    active++;
+    upload(r).catch((e) => update(r, { phase: e.status === 401 ? "interrupted" : "failed", detail: e.message }))
+      .finally(() => { active--; pump(); });
+  }
+}
+
+async function upload(r, allowDuplicate = false) {
+  const file = r.file;
+  if (r.sha === undefined) {
+    update(r, { phase: "hashing", detail: "" });
+    r.sha = file.size <= HASH_LIMIT ? await sha256(file) : null;
+  }
+  update(r, { phase: "starting", detail: "" });
+  const body = { filename: r.name, size_bytes: r.size };
+  if (r.sha) body.sha256 = r.sha;
+  if (allowDuplicate) body.allow_duplicate = true;
+  const res = await api("POST", "/v1/uploads", body, { "Idempotency-Key": r.key });
+  if (res.status === 409 && res.data?.error === "duplicate_content") {
+    const d = res.data.duplicate_of;
+    update(r, { phase: "duplicate", dupOf: d.document_id, detail: `Same content as "${d.filename}" — nothing was uploaded.` });
+    return;
+  }
+  if (!res.ok) throw new Error((res.data && (res.data.detail || res.data.error)) || "upload refused (" + res.status + ")");
+  const u = res.data;
+  update(r, { uploadId: u.upload_id, documentId: u.document_id });
+  if (u.status === "uploading") {
+    update(r, { phase: "uploading", progress: 0 });
+    if (u.grant) {
+      await put(u.grant.url, u.grant.headers, file, (n) => update(r, { progress: n / r.size }));
+    } else {
+      await uploadParts(r, u.multipart);
+    }
+    const done = await api("POST", `/v1/uploads/${u.upload_id}/complete`);
+    if (!done.ok) throw new Error("could not complete the upload (" + done.status + ")");
+  }
+  update(r, { phase: "verifying", detail: "", progress: 1 });
+}
+
+async function uploadParts(r, plan) {
+  const sent = new Array(plan.total_parts).fill(0);
+  for (let n = 1; n <= plan.total_parts; n++) {
+    const part = r.file.slice((n - 1) * plan.part_size_bytes, Math.min(n * plan.part_size_bytes, r.size));
+    const partSha = await sha256(part);
+    for (let attempt = 1; ; attempt++) {
+      try {
+        const g = await api("POST", `/v1/uploads/${r.uploadId}/parts/${n}`, { sha256: partSha });
+        if (!g.ok) throw new Error("part grant refused (" + g.status + ")");
+        await put(g.data.url, g.data.headers, part, (b) => {
+          sent[n - 1] = b; update(r, { progress: sent.reduce((a, c) => a + c, 0) / r.size, detail: `part ${n} of ${plan.total_parts}` });
+        });
+        break;
+      } catch (e) {
+        if (attempt >= 3) throw e;
+        await sleep(1000 * attempt);
+      }
+    }
+  }
+}
+
+// ---- status polling ---------------------------------------------------------------
+const STAGES = ["extract", "chunk", "embed", "index", "publish"];
+const STAGE_LABEL = { extract: "Extracting text", chunk: "Chunking", embed: "Embedding", index: "Indexing", publish: "Publishing" };
+
+async function poll(r) {
+  if (r.phase === "verifying" || (r.phase === "uploading" && !r.file)) {
+    const u = await api("GET", `/v1/uploads/${r.uploadId}`);
+    if (!u.ok) return;
+    const s = u.data.status;
+    if (s === "uploading" && !r.file) return update(r, { phase: "interrupted", detail: "Upload was cut off; choose the file again." });
+    if (s === "verifying") return update(r, { phase: "verifying", detail: "Checking size, SHA-256 and file type" });
+    if (s === "expired") return update(r, { phase: "failed", detail: "Upload session expired." });
+    if (s === "failed") {
+      if (u.data.duplicate_of) {
+        const d = await api("GET", `/v1/documents/${u.data.duplicate_of}`);
+        const name = d.ok ? d.data.filename : "an existing document";
+        return update(r, { phase: "duplicate", dupOf: u.data.duplicate_of, detail: `Same content as "${name}" — uploaded, but not processed again.` });
+      }
+      return update(r, { phase: "failed", detail: "Verification failed: stored file does not match (size, SHA-256 or type)." });
+    }
+    if (s === "accepted") update(r, { phase: "processing", detail: "Queued for processing" });
+  }
+  if (r.phase === "processing") {
+    const d = await api("GET", `/v1/documents/${r.documentId}`);
+    if (!d.ok) return;
+    const doc = d.data, jobs = doc.jobs || [];
+    if (doc.active_generation_id && doc.active_generation_id === doc.desired_generation_id) {
+      const embeds = jobs.filter((j) => j.stage === "embed").length;
+      return update(r, { phase: "ready", detail: embeds ? `${embeds} embedding batch${embeds > 1 ? "es" : ""} indexed` : "" });
+    }
+    const failed = jobs.find((j) => j.status === "failed");
+    if (failed) return update(r, { phase: "failed", detail: `${STAGE_LABEL[failed.stage] || failed.stage} failed: ${failed.failure_code || "unknown"}` });
+    let detail = "Waiting for a worker";
+    for (const stage of STAGES.slice().reverse()) {
+      const js = jobs.filter((j) => j.stage === stage);
+      if (!js.length) continue;
+      const done = js.filter((j) => j.status === "succeeded").length;
+      const retry = js.some((j) => j.status === "retry_wait");
+      const waiting = js.some((j) => j.status === "waiting");
+      detail = STAGE_LABEL[stage] + (js.length > 1 ? ` ${done}/${js.length}` : "") +
+        (waiting ? " (waiting for OCR)" : retry ? " (retrying)" : "");
+      break;
+    }
+    update(r, { detail });
+  }
+}
+
+async function pollLoop() {
+  for (;;) {
+    const due = rows.filter((r) => r.uploadId && (r.phase === "verifying" || r.phase === "processing" || (r.phase === "uploading" && !r.file)));
+    for (let i = 0; i < due.length; i += 6) {
+      await Promise.all(due.slice(i, i + 6).map((r) => poll(r).catch(() => {})));
+    }
+    await sleep(POLL_MS);
+  }
+}
+
+// ---- row actions ------------------------------------------------------------------
+$("rows").addEventListener("click", async (e) => {
+  const b = e.target.closest("button[data-act]");
+  if (!b) return;
+  const r = rows[Number(b.dataset.i)];
+  if (b.dataset.act === "open") return openDoc(r.documentId, null);
+  if (b.dataset.act === "retry") { r.key = "web-" + crypto.randomUUID(); r.uploadId = undefined; update(r, { phase: "queued", detail: "" }); queue.push(r); pump(); }
+  if (b.dataset.act === "anyway") {
+    r.key = "web-" + crypto.randomUUID(); r.uploadId = undefined;
+    update(r, { phase: "queued", detail: "Keeping a second copy" });
+    active++;
+    upload(r, true).catch((err) => update(r, { phase: "failed", detail: err.message })).finally(() => { active--; pump(); });
+  }
+});
+$("clear").addEventListener("click", () => {
+  for (let i = rows.length - 1; i >= 0; i--) if (TERMINAL.has(rows[i].phase)) rows.splice(i, 1);
+  render(); save();
+});
+
+async function openDoc(documentId, page) {
+  const tab = window.open("", "_blank");
+  try {
+    const v = await api("GET", `/v1/documents/${documentId}/view`);
+    if (!v.ok) throw new Error("cannot open (" + v.status + ")");
+    tab.location = v.data.url + (page ? "#page=" + page : "");
+  } catch (e) { tab.close(); alert(e.message); }
+}
+
+// ---- chat -------------------------------------------------------------------------
+function addMessage(cls, html) {
+  const div = document.createElement("div");
+  div.className = "msg " + cls; div.innerHTML = html;
+  $("messages").appendChild(div); div.scrollIntoView({ block: "end", behavior: "smooth" });
+  return div;
+}
+$("askForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const q = $("question").value.trim();
+  if (!q) return;
+  $("question").value = ""; $("askBtn").disabled = true;
+  addMessage("user", esc(q));
+  const bot = addMessage("bot", `<span class="muted">Searching your documents…</span>`);
+  try {
+    const res = await api("POST", "/demo/chat", { question: q });
+    if (!res.ok) throw new Error((res.data && res.data.detail) || "chat failed (" + res.status + ")");
+    const { answer, sources, model } = res.data;
+    const linked = esc(answer).replace(/\[(\d+)\]/g, (m, n) =>
+      sources.some((s) => s.n === Number(n)) ? `<span class="cite" data-n="${n}">[${n}]</span>` : m);
+    bot.innerHTML = `<div class="answer">${linked}</div>` + (sources.length ? `<div class="sources">${sources.map((s) => `
+      <div class="source" data-n="${s.n}">
+        <div class="meta"><strong>[${s.n}]</strong> ${esc(s.filename)}
+          ${s.pages.length ? `<span class="muted">· page ${s.pages.join(", ")}</span>` : ""}
+          <span class="muted">· score ${s.score.toFixed(3)}</span>
+          <button class="link" data-open="${esc(s.document_id)}" data-page="${s.pages[0] || ""}">Open</button>
+          <button class="link" data-toggle>Show text</button></div>
+        ${(s.also_in || []).length ? `<div class="small muted">Same passage also in: ${s.also_in.map((a) =>
+          esc(a.filename) + (a.pages.length ? " (page " + a.pages.join(", ") + ")" : "")).join("; ")}</div>` : ""}
+        <div class="snippet">${esc(s.text.slice(0, 280))}${s.text.length > 280 ? "…" : ""}</div>
+        <div class="snippet" hidden>${esc(s.text)}</div>
+      </div>`).join("")}</div>` : "") + (model ? `<div class="small muted" style="margin-top:6px">model: ${esc(model)}</div>` : "");
+  } catch (err) {
+    bot.innerHTML = `<span class="err">${esc(err.message)}</span>`;
+  } finally { $("askBtn").disabled = false; }
+});
+$("messages").addEventListener("click", (e) => {
+  const cite = e.target.closest(".cite");
+  if (cite) {
+    const src = cite.closest(".msg").querySelector(`.source[data-n="${cite.dataset.n}"]`);
+    if (src) { src.classList.add("hl"); src.scrollIntoView({ block: "nearest", behavior: "smooth" }); setTimeout(() => src.classList.remove("hl"), 1500); }
+  }
+  const open = e.target.closest("button[data-open]");
+  if (open) openDoc(open.dataset.open, open.dataset.page || null);
+  const toggle = e.target.closest("button[data-toggle]");
+  if (toggle) {
+    const [short, full] = toggle.closest(".source").querySelectorAll(".snippet");
+    const showFull = full.hidden; full.hidden = !showFull; short.hidden = showFull;
+    toggle.textContent = showFull ? "Hide text" : "Show text";
+  }
+});
+$("question").addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); $("askForm").requestSubmit(); }
+});
+
+// ---- wiring -----------------------------------------------------------------------
+$("choose").addEventListener("click", () => $("picker").click());
+$("picker").addEventListener("change", (e) => { addFiles(e.target.files); e.target.value = ""; });
+const drop = $("drop");
+drop.addEventListener("dragover", (e) => { e.preventDefault(); drop.classList.add("over"); });
+drop.addEventListener("dragleave", () => drop.classList.remove("over"));
+drop.addEventListener("drop", (e) => { e.preventDefault(); drop.classList.remove("over"); addFiles(e.dataTransfer.files); });
+$("token").value = token();
+$("saveToken").addEventListener("click", () => {
+  try { localStorage.setItem("doc-chat-token", $("token").value.trim()); } catch { /* not remembered */ }
+  checkHealth();
+});
+async function checkHealth() {
+  if (!token()) { $("health").textContent = "Paste your API token and Save"; return; }
+  try {
+    const r = await fetch("/readyz", { headers: { Authorization: "Bearer " + token() } });
+    $("health").textContent = r.ok ? "Connected" : r.status === 401 ? "Token not accepted" : "API not ready (" + r.status + ")";
+  } catch { $("health").textContent = "API unreachable"; }
+}
+
+load(); render(); checkHealth(); pollLoop();
+</script>
+</body>
+</html>

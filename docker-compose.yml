@@ -1,0 +1,28 @@
+services:
+  postgres:
+    # Pinned to the build tested here: PostgreSQL 16.16 with pgvector 0.8.7.
+    image: pgvector/pgvector:pg16@sha256:484e838076e04939d27d3e176e91c86eea96236126023be8d3059761122e579f
+    environment:
+      POSTGRES_USER: ingest
+      POSTGRES_PASSWORD: ingest_local_password
+      POSTGRES_DB: ingestion
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ingest -d ingestion"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+  localstack:
+    # Not validated here, so not pinned: pin a tested digest before relying on it.
+    image: localstack/localstack:latest
+    environment:
+      SERVICES: s3,sqs
+      AWS_DEFAULT_REGION: us-east-1
+      SQS_ENDPOINT_STRATEGY: path
+    ports:
+      - "127.0.0.1:4566:4566"
+volumes:
+  postgres_data:

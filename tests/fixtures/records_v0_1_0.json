@@ -1,0 +1,955 @@
+[
+ {
+  "source": "checkpoints.payload",
+  "value": {
+   "$record": "StageCheckpoint",
+   "fields": {
+    "checkpoint_id": {
+     "$uuid": "aa24d3a1-116c-50d1-aa2c-93e9615cd608"
+    },
+    "created_at": {
+     "$time": "2026-11-16T07:10:56.694842+00:00"
+    },
+    "document_id": {
+     "$uuid": "7f05d17e-5fdf-4061-acba-0374221948d4"
+    },
+    "generation_id": {
+     "$uuid": "a54cd205-5f35-5797-88a8-c1b864f1c875"
+    },
+    "input_sha256": "daa8496e467b985c33285deab654825af3e497f1c65fe46ca90976b5f5c3e58d",
+    "job_id": {
+     "$uuid": "33f282cd-bac8-5d7e-a1b4-8f383ddb2273"
+    },
+    "manifest_bucket": "pipeline-test",
+    "manifest_key": "tenants/82c23e70-38ad-454f-8133-08b6221ec3ad/generations/a54cd205-5f35-5797-88a8-c1b864f1c875/attempts/c82ce76f-d5ba-48cf-9de4-bcf76879685d/manifest.json",
+    "manifest_sha256": "af95b2d1128623621fb8f5056e74c4bfbcb14344d9a2206eecfd90df37d81685",
+    "manifest_size_bytes": 1362,
+    "manifest_version_id": "a6a87d83-ec27-468e-a9a6-6519ea6db416",
+    "pipeline_fingerprint": "88d657e79355c7dc6d130d1928f71d5971f5ed2cff033ecf1b2565541c804bc7",
+    "producer_lease_id": {
+     "$uuid": "c82ce76f-d5ba-48cf-9de4-bcf76879685d"
+    },
+    "shard_key": "0",
+    "source_sha256": "daa8496e467b985c33285deab654825af3e497f1c65fe46ca90976b5f5c3e58d",
+    "stage": {
+     "$enum": "ProcessingStage",
+     "value": "extract"
+    },
+    "tenant_id": {
+     "$uuid": "82c23e70-38ad-454f-8133-08b6221ec3ad"
+    }
+   }
+  }
+ },
+ {
+  "source": "content_artifacts.payload",
+  "value": {
+   "$record": "ContentArtifact",
+   "fields": {
+    "artifact_id": {
+     "$uuid": "7bd6bab8-c53b-5c77-8c16-a7b6c2b13910"
+    },
+    "bucket": "pipeline-test",
+    "created_at": {
+     "$time": "2026-11-16T07:10:56.556752+00:00"
+    },
+    "object_key": "tenants/82c23e70-38ad-454f-8133-08b6221ec3ad/uploads/07ad89f7-d904-4c19-8efe-77be1674f101/source",
+    "object_version_id": "8b5483f4-cc8e-4e36-8c68-a681d7bd886b",
+    "sha256": "daa8496e467b985c33285deab654825af3e497f1c65fe46ca90976b5f5c3e58d",
+    "size_bytes": 335,
+    "tenant_id": {
+     "$uuid": "82c23e70-38ad-454f-8133-08b6221ec3ad"
+    }
+   }
+  }
+ },
+ {
+  "source": "documents.payload",
+  "value": {
+   "$record": "Document",
+   "fields": {
+    "acl_ref": "tenant",
+    "active_generation_id": null,
+    "created_at": {
+     "$time": "2026-11-16T07:10:56.514936+00:00"
+    },
+    "deleted_at": {
+     "$time": "2026-11-16T07:10:57.163244+00:00"
+    },
+    "desired_generation_id": null,
+    "display_name": "example.txt",
+    "document_id": {
+     "$uuid": "7f05d17e-5fdf-4061-acba-0374221948d4"
+    },
+    "tenant_id": {
+     "$uuid": "82c23e70-38ad-454f-8133-08b6221ec3ad"
+    }
+   }
+  }
+ },
+ {
+  "source": "generations.inventory",
+  "value": {
+   "$record": "GenerationInventory",
+   "fields": {
+    "batches": {
+     "$tuple": [
+      {
+       "$record": "ChunkBatch",
+       "fields": {
+        "batch_key": "000000",
+        "end_ordinal": 2,
+        "manifest": {
+         "$record": "ManifestOutput",
+         "fields": {
+          "bucket": "pipeline-test",
+          "format_name": "stage-manifest",
+          "format_version": 1,
+          "object_key": "tenants/82c23e70-38ad-454f-8133-08b6221ec3ad/generations/a54cd205-5f35-5797-88a8-c1b864f1c875/attempts/fa59be64-b18d-4dc0-a10f-fbc2b9b31aaf/batch-000000.json",
+          "object_version_id": "0396095d-0759-44e3-90f2-57c4bbf136d4",
+          "role": "chunk_batch",
+          "sha256": "bddf41a678d099e0b64a337eda093de1316c3ef8deb54c6d1fe21f0dc4346e5e",
+          "size_bytes": 1193
+         }
+        },
+        "start_ordinal": 0
+       }
+      },
+      {
+       "$record": "ChunkBatch",
+       "fields": {
+        "batch_key": "000001",
+        "end_ordinal": 4,
+        "manifest": {
+         "$record": "ManifestOutput",
+         "fields": {
+          "bucket": "pipeline-test",
+          "format_name": "stage-manifest",
+          "format_version": 1,
+          "object_key": "tenants/82c23e70-38ad-454f-8133-08b6221ec3ad/generations/a54cd205-5f35-5797-88a8-c1b864f1c875/attempts/fa59be64-b18d-4dc0-a10f-fbc2b9b31aaf/batch-000001.json",
+          "object_version_id": "1086fb89-299d-44ad-879d-10b16fbb792f",
+          "role": "chunk_batch",
+          "sha256": "66c8cd392875c5fc14a97322c6b26dfd22748c75f83ffdcc68cb43e0228858c9",
+          "size_bytes": 1193
+         }
+        },
+        "start_ordinal": 2
+       }
+      },
+      {
+       "$record": "ChunkBatch",
+       "fields": {
+        "batch_key": "000002",
+        "end_ordinal": 5,
+        "manifest": {
+         "$record": "ManifestOutput",
+         "fields": {
+          "bucket": "pipeline-test",
+          "format_name": "stage-manifest",
+          "format_version": 1,
+          "object_key": "tenants/82c23e70-38ad-454f-8133-08b6221ec3ad/generations/a54cd205-5f35-5797-88a8-c1b864f1c875/attempts/fa59be64-b18d-4dc0-a10f-fbc2b9b31aaf/batch-000002.json",
+          "object_version_id": "f0d23b0f-b0e1-48df-8823-de5f18ac89f6",
+          "role": "chunk_batch",
+          "sha256": "9fb82be9d1568840b6b86d0f5320cd67f43d9b43e83ae9cda78b2944d85ce223",
+          "size_bytes": 1077
+         }
+        },
+        "start_ordinal": 4
+       }
+      }
+     ]
+    },
+    "chunk_count": 5,
+    "dimensions": 8,
+    "document_id": {
+     "$uuid": "7f05d17e-5fdf-4061-acba-0374221948d4"
+    },
+    "generation_id": {
+     "$uuid": "a54cd205-5f35-5797-88a8-c1b864f1c875"
+    },
+    "pipeline_fingerprint": "88d657e79355c7dc6d130d1928f71d5971f5ed2cff033ecf1b2565541c804bc7",
+    "source_sha256": "daa8496e467b985c33285deab654825af3e497f1c65fe46ca90976b5f5c3e58d",
+    "source_version_id": {
+     "$uuid": "f1edc5a3-87f8-535e-ae6a-1ef19487814a"
+    },
+    "tenant_id": {
+     "$uuid": "82c23e70-38ad-454f-8133-08b6221ec3ad"
+    },
+    "vector_ids_sha256": "1b2f40343659166a5fe2e919f64e4b27899c9414c1cab5738e679466d909da7f",
+    "vector_target": "pgvector-default"
+   }
+  }
+ },
+ {
+  "source": "generations.inventory_ref",
+  "value": {
+   "$record": "ManifestOutput",
+   "fields": {
+    "bucket": "pipeline-test",
+    "format_name": "generation-inventory",
+    "format_version": 1,
+    "object_key": "tenants/82c23e70-38ad-454f-8133-08b6221ec3ad/generations/a54cd205-5f35-5797-88a8-c1b864f1c875/attempts/fa59be64-b18d-4dc0-a10f-fbc2b9b31aaf/inventory.json",
+    "object_version_id": "57f216d7-d24b-4a6d-928d-de558e541977",
+    "role": "inventory",
+    "sha256": "ffdd0f9f0e09833c48e68703276bcb6a390a99ed0bec7ac5fe0f0319dfd01862",
+    "size_bytes": 2052
+   }
+  }
+ },
+ {
+  "source": "generations.payload",
+  "value": {
+   "$record": "ProcessingGeneration",
+   "fields": {
+    "created_at": {
+     "$time": "2026-11-16T07:10:56.556752+00:00"
+    },
+    "document_id": {
+     "$uuid": "7f05d17e-5fdf-4061-acba-0374221948d4"
+    },
+    "generation_id": {
+     "$uuid": "a54cd205-5f35-5797-88a8-c1b864f1c875"
+    },
+    "pipeline_fingerprint": "88d657e79355c7dc6d130d1928f71d5971f5ed2cff033ecf1b2565541c804bc7",
+    "source_version_id": {
+     "$uuid": "f1edc5a3-87f8-535e-ae6a-1ef19487814a"
+    },
+    "tenant_id": {
+     "$uuid": "82c23e70-38ad-454f-8133-08b6221ec3ad"
+    }
+   }
+  }
+ },
+ {
+  "source": "jobs.payload.chunk",
+  "value": {
+   "$record": "Job",
+   "fields": {
+    "attempt": 1,
+    "budget": {
+     "$record": "ExecutionBudget",
+     "fields": {
+      "deadline_at": {
+       "$time": "2026-11-16T07:40:56.703164+00:00"
+      },
+      "generation_deadline_at": {
+       "$time": "2026-11-16T08:10:56.556752+00:00"
+      },
+      "policy": {
+       "$record": "ExecutionPolicy",
+       "fields": {
+        "heartbeat_seconds": 30.0,
+        "lease_seconds": 120,
+        "max_attempt_seconds": 300.0,
+        "max_job_seconds": 1800.0,
+        "retry": {
+         "$record": "RetryPolicy",
+         "fields": {
+          "base_delay_seconds": 1.0,
+          "max_attempts": 5,
+          "max_delay_seconds": 60.0
+         }
+        }
+       }
+      },
+      "starts_at": {
+       "$time": "2026-11-16T07:10:56.703164+00:00"
+      }
+     }
+    },
+    "created_at": {
+     "$time": "2026-11-16T07:10:56.703164+00:00"
+    },
+    "document_id": {
+     "$uuid": "7f05d17e-5fdf-4061-acba-0374221948d4"
+    },
+    "generation_id": {
+     "$uuid": "a54cd205-5f35-5797-88a8-c1b864f1c875"
+    },
+    "job_id": {
+     "$uuid": "17b7d730-c57d-539f-9315-65e62bb1c43b"
+    },
+    "lease": null,
+    "next_attempt_at": null,
+    "shard_key": "0",
+    "stage": {
+     "$enum": "ProcessingStage",
+     "value": "chunk"
+    },
+    "status": {
+     "$enum": "JobStatus",
+     "value": "succeeded"
+    },
+    "tenant_id": {
+     "$uuid": "82c23e70-38ad-454f-8133-08b6221ec3ad"
+    }
+   }
+  }
+ },
+ {
+  "source": "jobs.payload.embed",
+  "value": {
+   "$record": "Job",
+   "fields": {
+    "attempt": 1,
+    "budget": {
+     "$record": "ExecutionBudget",
+     "fields": {
+      "deadline_at": {
+       "$time": "2026-11-16T07:40:56.804202+00:00"
+      },
+      "generation_deadline_at": {
+       "$time": "2026-11-16T08:10:56.556752+00:00"
+      },
+      "policy": {
+       "$record": "ExecutionPolicy",
+       "fields": {
+        "heartbeat_seconds": 30.0,
+        "lease_seconds": 120,
+        "max_attempt_seconds": 300.0,
+        "max_job_seconds": 1800.0,
+        "retry": {
+         "$record": "RetryPolicy",
+         "fields": {
+          "base_delay_seconds": 1.0,
+          "max_attempts": 5,
+          "max_delay_seconds": 60.0
+         }
+        }
+       }
+      },
+      "starts_at": {
+       "$time": "2026-11-16T07:10:56.804202+00:00"
+      }
+     }
+    },
+    "created_at": {
+     "$time": "2026-11-16T07:10:56.804202+00:00"
+    },
+    "document_id": {
+     "$uuid": "7f05d17e-5fdf-4061-acba-0374221948d4"
+    },
+    "generation_id": {
+     "$uuid": "a54cd205-5f35-5797-88a8-c1b864f1c875"
+    },
+    "job_id": {
+     "$uuid": "5b0fa29a-783a-5066-bc39-04112fc3357d"
+    },
+    "lease": null,
+    "next_attempt_at": null,
+    "shard_key": "000000",
+    "stage": {
+     "$enum": "ProcessingStage",
+     "value": "embed"
+    },
+    "status": {
+     "$enum": "JobStatus",
+     "value": "succeeded"
+    },
+    "tenant_id": {
+     "$uuid": "82c23e70-38ad-454f-8133-08b6221ec3ad"
+    }
+   }
+  }
+ },
+ {
+  "source": "jobs.payload.extract",
+  "value": {
+   "$record": "Job",
+   "fields": {
+    "attempt": 1,
+    "budget": {
+     "$record": "ExecutionBudget",
+     "fields": {
+      "deadline_at": {
+       "$time": "2026-11-16T07:40:56.556752+00:00"
+      },
+      "generation_deadline_at": {
+       "$time": "2026-11-16T08:10:56.556752+00:00"
+      },
+      "policy": {
+       "$record": "ExecutionPolicy",
+       "fields": {
+        "heartbeat_seconds": 30.0,
+        "lease_seconds": 120,
+        "max_attempt_seconds": 300.0,
+        "max_job_seconds": 1800.0,
+        "retry": {
+         "$record": "RetryPolicy",
+         "fields": {
+          "base_delay_seconds": 1.0,
+          "max_attempts": 5,
+          "max_delay_seconds": 60.0
+         }
+        }
+       }
+      },
+      "starts_at": {
+       "$time": "2026-11-16T07:10:56.556752+00:00"
+      }
+     }
+    },
+    "created_at": {
+     "$time": "2026-11-16T07:10:56.556752+00:00"
+    },
+    "document_id": {
+     "$uuid": "7f05d17e-5fdf-4061-acba-0374221948d4"
+    },
+    "generation_id": {
+     "$uuid": "a54cd205-5f35-5797-88a8-c1b864f1c875"
+    },
+    "job_id": {
+     "$uuid": "33f282cd-bac8-5d7e-a1b4-8f383ddb2273"
+    },
+    "lease": null,
+    "next_attempt_at": null,
+    "shard_key": "0",
+    "stage": {
+     "$enum": "ProcessingStage",
+     "value": "extract"
+    },
+    "status": {
+     "$enum": "JobStatus",
+     "value": "succeeded"
+    },
+    "tenant_id": {
+     "$uuid": "82c23e70-38ad-454f-8133-08b6221ec3ad"
+    }
+   }
+  }
+ },
+ {
+  "source": "jobs.payload.index",
+  "value": {
+   "$record": "Job",
+   "fields": {
+    "attempt": 1,
+    "budget": {
+     "$record": "ExecutionBudget",
+     "fields": {
+      "deadline_at": {
+       "$time": "2026-11-16T07:40:56.995310+00:00"
+      },
+      "generation_deadline_at": {
+       "$time": "2026-11-16T08:10:56.556752+00:00"
+      },
+      "policy": {
+       "$record": "ExecutionPolicy",
+       "fields": {
+        "heartbeat_seconds": 30.0,
+        "lease_seconds": 120,
+        "max_attempt_seconds": 300.0,
+        "max_job_seconds": 1800.0,
+        "retry": {
+         "$record": "RetryPolicy",
+         "fields": {
+          "base_delay_seconds": 1.0,
+          "max_attempts": 5,
+          "max_delay_seconds": 60.0
+         }
+        }
+       }
+      },
+      "starts_at": {
+       "$time": "2026-11-16T07:10:56.995310+00:00"
+      }
+     }
+    },
+    "created_at": {
+     "$time": "2026-11-16T07:10:56.995310+00:00"
+    },
+    "document_id": {
+     "$uuid": "7f05d17e-5fdf-4061-acba-0374221948d4"
+    },
+    "generation_id": {
+     "$uuid": "a54cd205-5f35-5797-88a8-c1b864f1c875"
+    },
+    "job_id": {
+     "$uuid": "94593fee-4e2d-5881-aae5-76a379a2c0e3"
+    },
+    "lease": null,
+    "next_attempt_at": null,
+    "shard_key": "0",
+    "stage": {
+     "$enum": "ProcessingStage",
+     "value": "index"
+    },
+    "status": {
+     "$enum": "JobStatus",
+     "value": "succeeded"
+    },
+    "tenant_id": {
+     "$uuid": "82c23e70-38ad-454f-8133-08b6221ec3ad"
+    }
+   }
+  }
+ },
+ {
+  "source": "jobs.payload.publish",
+  "value": {
+   "$record": "Job",
+   "fields": {
+    "attempt": 1,
+    "budget": {
+     "$record": "ExecutionBudget",
+     "fields": {
+      "deadline_at": {
+       "$time": "2026-11-16T07:40:57.076350+00:00"
+      },
+      "generation_deadline_at": {
+       "$time": "2026-11-16T08:10:56.556752+00:00"
+      },
+      "policy": {
+       "$record": "ExecutionPolicy",
+       "fields": {
+        "heartbeat_seconds": 30.0,
+        "lease_seconds": 120,
+        "max_attempt_seconds": 300.0,
+        "max_job_seconds": 1800.0,
+        "retry": {
+         "$record": "RetryPolicy",
+         "fields": {
+          "base_delay_seconds": 1.0,
+          "max_attempts": 5,
+          "max_delay_seconds": 60.0
+         }
+        }
+       }
+      },
+      "starts_at": {
+       "$time": "2026-11-16T07:10:57.076350+00:00"
+      }
+     }
+    },
+    "created_at": {
+     "$time": "2026-11-16T07:10:57.076350+00:00"
+    },
+    "document_id": {
+     "$uuid": "7f05d17e-5fdf-4061-acba-0374221948d4"
+    },
+    "generation_id": {
+     "$uuid": "a54cd205-5f35-5797-88a8-c1b864f1c875"
+    },
+    "job_id": {
+     "$uuid": "44759c11-a8d1-57c3-9094-43cb48d47062"
+    },
+    "lease": null,
+    "next_attempt_at": null,
+    "shard_key": "0",
+    "stage": {
+     "$enum": "ProcessingStage",
+     "value": "publish"
+    },
+    "status": {
+     "$enum": "JobStatus",
+     "value": "succeeded"
+    },
+    "tenant_id": {
+     "$uuid": "82c23e70-38ad-454f-8133-08b6221ec3ad"
+    }
+   }
+  }
+ },
+ {
+  "source": "operations.result.claim-job",
+  "value": {
+   "$record": "Job",
+   "fields": {
+    "attempt": 1,
+    "budget": {
+     "$record": "ExecutionBudget",
+     "fields": {
+      "deadline_at": {
+       "$time": "2026-11-16T07:40:56.995310+00:00"
+      },
+      "generation_deadline_at": {
+       "$time": "2026-11-16T08:10:56.556752+00:00"
+      },
+      "policy": {
+       "$record": "ExecutionPolicy",
+       "fields": {
+        "heartbeat_seconds": 30.0,
+        "lease_seconds": 120,
+        "max_attempt_seconds": 300.0,
+        "max_job_seconds": 1800.0,
+        "retry": {
+         "$record": "RetryPolicy",
+         "fields": {
+          "base_delay_seconds": 1.0,
+          "max_attempts": 5,
+          "max_delay_seconds": 60.0
+         }
+        }
+       }
+      },
+      "starts_at": {
+       "$time": "2026-11-16T07:10:56.995310+00:00"
+      }
+     }
+    },
+    "created_at": {
+     "$time": "2026-11-16T07:10:56.995310+00:00"
+    },
+    "document_id": {
+     "$uuid": "7f05d17e-5fdf-4061-acba-0374221948d4"
+    },
+    "generation_id": {
+     "$uuid": "a54cd205-5f35-5797-88a8-c1b864f1c875"
+    },
+    "job_id": {
+     "$uuid": "94593fee-4e2d-5881-aae5-76a379a2c0e3"
+    },
+    "lease": {
+     "$record": "JobLease",
+     "fields": {
+      "acquired_at": {
+       "$time": "2026-11-16T07:10:57.029323+00:00"
+      },
+      "attempt_deadline_at": {
+       "$time": "2026-11-16T07:15:57.029323+00:00"
+      },
+      "expires_at": {
+       "$time": "2026-11-16T07:12:57.029323+00:00"
+      },
+      "lease_id": {
+       "$uuid": "d7ef1184-8000-4cc2-b317-ac04667b53bb"
+      },
+      "worker_id": "integration-worker"
+     }
+    },
+    "next_attempt_at": null,
+    "shard_key": "0",
+    "stage": {
+     "$enum": "ProcessingStage",
+     "value": "index"
+    },
+    "status": {
+     "$enum": "JobStatus",
+     "value": "running"
+    },
+    "tenant_id": {
+     "$uuid": "82c23e70-38ad-454f-8133-08b6221ec3ad"
+    }
+   }
+  }
+ },
+ {
+  "source": "operations.result.claim-outbox",
+  "value": {
+   "$record": "OutboxRecord",
+   "fields": {
+    "available_at": {
+     "$time": "2026-11-16T07:10:56.804202+00:00"
+    },
+    "claim": {
+     "$record": "PublisherClaim",
+     "fields": {
+      "claim_id": {
+       "$uuid": "bf866e5c-08ee-4eb5-bd41-1ec5bf5e7908"
+      },
+      "expires_at": {
+       "$time": "2026-11-16T07:12:56.957078+00:00"
+      },
+      "publisher_id": "integration-publisher"
+     }
+    },
+    "created_at": {
+     "$time": "2026-11-16T07:10:56.804202+00:00"
+    },
+    "event": {
+     "$record": "JobAvailable",
+     "fields": {
+      "event_id": {
+       "$uuid": "e8b0c5d2-a218-55d0-a8a2-c99bb5bb6858"
+      },
+      "job_id": {
+       "$uuid": "ab43b4f9-d2d0-5a2a-b3f7-bc4814045c96"
+      },
+      "tenant_id": {
+       "$uuid": "82c23e70-38ad-454f-8133-08b6221ec3ad"
+      }
+     }
+    },
+    "publish_attempts": 1,
+    "published_at": null
+   }
+  }
+ },
+ {
+  "source": "operations.result.complete",
+  "value": {
+   "$record": "Job",
+   "fields": {
+    "attempt": 1,
+    "budget": {
+     "$record": "ExecutionBudget",
+     "fields": {
+      "deadline_at": {
+       "$time": "2026-11-16T07:40:56.804202+00:00"
+      },
+      "generation_deadline_at": {
+       "$time": "2026-11-16T08:10:56.556752+00:00"
+      },
+      "policy": {
+       "$record": "ExecutionPolicy",
+       "fields": {
+        "heartbeat_seconds": 30.0,
+        "lease_seconds": 120,
+        "max_attempt_seconds": 300.0,
+        "max_job_seconds": 1800.0,
+        "retry": {
+         "$record": "RetryPolicy",
+         "fields": {
+          "base_delay_seconds": 1.0,
+          "max_attempts": 5,
+          "max_delay_seconds": 60.0
+         }
+        }
+       }
+      },
+      "starts_at": {
+       "$time": "2026-11-16T07:10:56.804202+00:00"
+      }
+     }
+    },
+    "created_at": {
+     "$time": "2026-11-16T07:10:56.804202+00:00"
+    },
+    "document_id": {
+     "$uuid": "7f05d17e-5fdf-4061-acba-0374221948d4"
+    },
+    "generation_id": {
+     "$uuid": "a54cd205-5f35-5797-88a8-c1b864f1c875"
+    },
+    "job_id": {
+     "$uuid": "5b0fa29a-783a-5066-bc39-04112fc3357d"
+    },
+    "lease": null,
+    "next_attempt_at": null,
+    "shard_key": "000000",
+    "stage": {
+     "$enum": "ProcessingStage",
+     "value": "embed"
+    },
+    "status": {
+     "$enum": "JobStatus",
+     "value": "succeeded"
+    },
+    "tenant_id": {
+     "$uuid": "82c23e70-38ad-454f-8133-08b6221ec3ad"
+    }
+   }
+  }
+ },
+ {
+  "source": "operations.result.delete",
+  "value": {
+   "$record": "Document",
+   "fields": {
+    "acl_ref": "tenant",
+    "active_generation_id": null,
+    "created_at": {
+     "$time": "2026-11-16T07:10:56.514936+00:00"
+    },
+    "deleted_at": {
+     "$time": "2026-11-16T07:10:57.163244+00:00"
+    },
+    "desired_generation_id": null,
+    "display_name": "example.txt",
+    "document_id": {
+     "$uuid": "7f05d17e-5fdf-4061-acba-0374221948d4"
+    },
+    "tenant_id": {
+     "$uuid": "82c23e70-38ad-454f-8133-08b6221ec3ad"
+    }
+   }
+  }
+ },
+ {
+  "source": "operations.result.publish",
+  "value": {
+   "$record": "Document",
+   "fields": {
+    "acl_ref": "tenant",
+    "active_generation_id": {
+     "$uuid": "a54cd205-5f35-5797-88a8-c1b864f1c875"
+    },
+    "created_at": {
+     "$time": "2026-11-16T07:10:56.514936+00:00"
+    },
+    "deleted_at": null,
+    "desired_generation_id": {
+     "$uuid": "a54cd205-5f35-5797-88a8-c1b864f1c875"
+    },
+    "display_name": "example.txt",
+    "document_id": {
+     "$uuid": "7f05d17e-5fdf-4061-acba-0374221948d4"
+    },
+    "tenant_id": {
+     "$uuid": "82c23e70-38ad-454f-8133-08b6221ec3ad"
+    }
+   }
+  }
+ },
+ {
+  "source": "operations.result.published",
+  "value": true
+ },
+ {
+  "source": "operations.result.seal",
+  "value": {
+   "$record": "ManifestOutput",
+   "fields": {
+    "bucket": "pipeline-test",
+    "format_name": "generation-inventory",
+    "format_version": 1,
+    "object_key": "tenants/82c23e70-38ad-454f-8133-08b6221ec3ad/generations/a54cd205-5f35-5797-88a8-c1b864f1c875/attempts/fa59be64-b18d-4dc0-a10f-fbc2b9b31aaf/inventory.json",
+    "object_version_id": "57f216d7-d24b-4a6d-928d-de558e541977",
+    "role": "inventory",
+    "sha256": "ffdd0f9f0e09833c48e68703276bcb6a390a99ed0bec7ac5fe0f0319dfd01862",
+    "size_bytes": 2052
+   }
+  }
+ },
+ {
+  "source": "outbox.payload",
+  "value": {
+   "$record": "OutboxRecord",
+   "fields": {
+    "available_at": {
+     "$time": "2026-11-16T07:10:56.995310+00:00"
+    },
+    "claim": null,
+    "created_at": {
+     "$time": "2026-11-16T07:10:56.995310+00:00"
+    },
+    "event": {
+     "$record": "JobAvailable",
+     "fields": {
+      "event_id": {
+       "$uuid": "127712e4-3fb9-5dea-91fa-9299eda79322"
+      },
+      "job_id": {
+       "$uuid": "94593fee-4e2d-5881-aae5-76a379a2c0e3"
+      },
+      "tenant_id": {
+       "$uuid": "82c23e70-38ad-454f-8133-08b6221ec3ad"
+      }
+     }
+    },
+    "publish_attempts": 1,
+    "published_at": {
+     "$time": "2026-11-16T07:10:57.023562+00:00"
+    }
+   }
+  }
+ },
+ {
+  "source": "source_versions.payload",
+  "value": {
+   "$record": "SourceVersion",
+   "fields": {
+    "artifact_id": {
+     "$uuid": "7bd6bab8-c53b-5c77-8c16-a7b6c2b13910"
+    },
+    "bucket": "pipeline-test",
+    "created_at": {
+     "$time": "2026-11-16T07:10:56.556752+00:00"
+    },
+    "document_id": {
+     "$uuid": "7f05d17e-5fdf-4061-acba-0374221948d4"
+    },
+    "object_key": "tenants/82c23e70-38ad-454f-8133-08b6221ec3ad/uploads/07ad89f7-d904-4c19-8efe-77be1674f101/source",
+    "object_version_id": "8b5483f4-cc8e-4e36-8c68-a681d7bd886b",
+    "sha256": "daa8496e467b985c33285deab654825af3e497f1c65fe46ca90976b5f5c3e58d",
+    "size_bytes": 335,
+    "source_version_id": {
+     "$uuid": "f1edc5a3-87f8-535e-ae6a-1ef19487814a"
+    },
+    "tenant_id": {
+     "$uuid": "82c23e70-38ad-454f-8133-08b6221ec3ad"
+    }
+   }
+  }
+ },
+ {
+  "source": "uploads.payload",
+  "value": {
+   "$record": "UploadSession",
+   "fields": {
+    "bucket": "pipeline-test",
+    "created_at": {
+     "$time": "2026-11-16T07:10:56.514936+00:00"
+    },
+    "document_id": {
+     "$uuid": "7f05d17e-5fdf-4061-acba-0374221948d4"
+    },
+    "expected_sha256": "daa8496e467b985c33285deab654825af3e497f1c65fe46ca90976b5f5c3e58d",
+    "expected_size_bytes": 335,
+    "expires_at": {
+     "$time": "2026-11-16T08:10:56.514936+00:00"
+    },
+    "multipart_upload_id": null,
+    "object_key": "tenants/82c23e70-38ad-454f-8133-08b6221ec3ad/uploads/07ad89f7-d904-4c19-8efe-77be1674f101/source",
+    "original_name": "example.txt",
+    "request_key": "e0358368-0572-4b70-9e26-ce6b9dae4b63",
+    "source_version_id": {
+     "$uuid": "f1edc5a3-87f8-535e-ae6a-1ef19487814a"
+    },
+    "status": {
+     "$enum": "UploadStatus",
+     "value": "accepted"
+    },
+    "tenant_id": {
+     "$uuid": "82c23e70-38ad-454f-8133-08b6221ec3ad"
+    },
+    "upload_id": {
+     "$uuid": "07ad89f7-d904-4c19-8efe-77be1674f101"
+    }
+   }
+  }
+ },
+ {
+  "source": "uploads.pipeline",
+  "value": {
+   "$record": "PipelineConfig",
+   "fields": {
+    "chunker": {
+     "$record": "ComponentSpec",
+     "fields": {
+      "driver": "characters",
+      "implementation_version": "1",
+      "options_json": "{\"size\": 80, \"overlap\": 10}"
+     }
+    },
+    "embedder": {
+     "$record": "ComponentSpec",
+     "fields": {
+      "driver": "deterministic",
+      "implementation_version": "1",
+      "options_json": "{\"model\": \"text-embedding-3-small\", \"dimensions\": 8, \"encoding\": \"cl100k_base\"}"
+     }
+    },
+    "extractor": {
+     "$record": "ComponentSpec",
+     "fields": {
+      "driver": "builtin_text",
+      "implementation_version": "1",
+      "options_json": "{}"
+     }
+    }
+   }
+  }
+ },
+ {
+  "source": "uploads.verification_ref",
+  "value": {
+   "$record": "ObjectRef",
+   "fields": {
+    "bucket": "pipeline-test",
+    "key": "tenants/82c23e70-38ad-454f-8133-08b6221ec3ad/uploads/07ad89f7-d904-4c19-8efe-77be1674f101/source",
+    "version_id": "8b5483f4-cc8e-4e36-8c68-a681d7bd886b"
+   }
+  }
+ }
+]
